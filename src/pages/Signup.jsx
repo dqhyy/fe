@@ -1,8 +1,78 @@
-import React from "react";
+import React, { useState } from "react";
 import AuthLayout from "../components/AuthLayout";
-import { TextField, Button, MenuItem } from "@mui/material";
+import { TextField, Button, MenuItem, Alert, CircularProgress } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError("");
+
+        if (!username || !email || !password || !confirmPassword) {
+            setError("Vui lòng điền đầy đủ thông tin");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            setError("Mật khẩu xác nhận không khớp");
+            return;
+        }
+
+        if (password.length < 6) {
+            setError("Mật khẩu phải có ít nhất 6 ký tự");
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const response = await fetch("http://localhost:8080/api/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username,
+                    password,
+                    email,
+                }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(
+                    errorData.message || 
+                    errorData.error || 
+                    "Đăng ký thất bại. Vui lòng thử lại."
+                );
+            }
+
+            const data = await response.json();
+            
+            if (data.result || data.status === "success") {
+                navigate("/login", { 
+                    state: { 
+                        message: "Đăng ký thành công! Vui lòng đăng nhập." 
+                    } 
+                });
+            } else {
+                throw new Error("Đăng ký thất bại. Vui lòng thử lại.");
+            }
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <AuthLayout >
             {/* Logo + Brand */}
@@ -18,11 +88,38 @@ const Signup = () => {
                 Đăng ký tài khoản
             </h2>
 
+            {/* Error Alert */}
+            {error && (
+                <Alert severity="error" sx={{ mb: 3 }}>
+                    {error}
+                </Alert>
+            )}
+
             {/* Form */}
-            <form className="flex flex-col gap-4">
-                <TextField label="Họ và tên" fullWidth variant="outlined" />
-                <TextField label="Email" type="email" fullWidth variant="outlined" />
-                <TextField label="Số điện thoại" type="tel" fullWidth variant="outlined" />
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+                <TextField 
+                    label="Tên đăng nhập" 
+                    fullWidth 
+                    variant="outlined"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                />
+                <TextField 
+                    label="Email" 
+                    type="email" 
+                    fullWidth 
+                    variant="outlined"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                />
+                <TextField 
+                    label="Số điện thoại" 
+                    type="tel" 
+                    fullWidth 
+                    variant="outlined" 
+                />
 
                 {/* Tuổi + Giới tính */}
                 <div className="flex gap-3">
@@ -57,20 +154,30 @@ const Signup = () => {
                     />
                 </div>
 
-
-
-
-                <TextField label="Mật khẩu" type="password" fullWidth variant="outlined" />
+                <TextField 
+                    label="Mật khẩu" 
+                    type="password" 
+                    fullWidth 
+                    variant="outlined"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
                 <TextField
                     label="Nhập lại mật khẩu"
                     type="password"
                     fullWidth
                     variant="outlined"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
                 />
 
                 <Button
                     variant="contained"
                     fullWidth
+                    type="submit"
+                    disabled={loading}
                     sx={{
                         mt: 2,
                         backgroundColor: "#0078D4",
@@ -81,7 +188,7 @@ const Signup = () => {
                         fontSize: "1rem",
                     }}
                 >
-                    Đăng ký
+                    {loading ? <CircularProgress size={24} color="inherit" /> : "Đăng ký"}
                 </Button>
 
                 <p className="text-center text-sm mt-4 text-gray-600">

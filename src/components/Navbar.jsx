@@ -1,13 +1,35 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { specialties } from '../assets/data/data.js';
 
 const Navbar = () => {
     const [activeMenu, setActiveMenu] = useState(null);
+    const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+    const profileDropdownRef = useRef(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target)) {
+                setProfileDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('hycare_token');
+        navigate('/login');
+    };
 
     return (
         <nav className="fixed top-0 left-0 w-full z-20 bg-white">
@@ -75,10 +97,36 @@ const Navbar = () => {
                             <NotificationsIcon fontSize="medium" />
                         </button>
 
-                        <button className="flex items-center text-maincolor hover:text-gray-700 transition-colors">
-                            <AccountCircleIcon fontSize="medium" />
-                            <ArrowDropDownIcon fontSize="medium" />
-                        </button>
+                        <div className="relative" ref={profileDropdownRef}>
+                            <button 
+                                className="flex items-center text-maincolor hover:text-gray-700 transition-colors"
+                                onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                            >
+                                <AccountCircleIcon fontSize="medium" />
+                                <ArrowDropDownIcon fontSize="medium" />
+                            </button>
+
+                            {profileDropdownOpen && (
+                                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md border border-gray-200 z-30">
+                                    <div className="py-1">
+                                        <Link
+                                            to="/profile"
+                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                                            onClick={() => setProfileDropdownOpen(false)}
+                                        >
+                                            Hồ sơ
+                                        </Link>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center gap-2"
+                                        >
+                                            <LogoutIcon fontSize="small" />
+                                            Đăng xuất
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

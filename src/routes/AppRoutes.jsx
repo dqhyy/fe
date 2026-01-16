@@ -51,18 +51,30 @@ import MedicalResult from '../pages/patient/MedicalResult'
 import NotFound from '../pages/NotFound'
 import HumanResourceManagement from '../pages/admin/HumanResourceManagement'
 import AppointmentsDoctor from '../pages/doctor/AppointmentsDoctor'
+import ProtectedRoute from './ProtectedRoute'
 
 const AppRoutes = () => {
     return (
         <Routes>
 
-            {/* ===== PUBLIC ===== */}
+            {/* ===== PUBLIC & PROTECTED MIXED ===== */}
             <Route element={<PublicLayout />}>
-                <Route path="/" element={<Home />} />
+                {/* Pages everyone can see */}
                 <Route path="/specialties" element={<Specialties />} />
                 <Route path="/about" element={<About />} />
 
-                {/* specialties */}
+                {/* Protect Home and Booking */}
+                <Route element={<ProtectedRoute />}>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/booking" element={<Booking />} />
+                    <Route path="/myprofile" element={<PatientLayout />}>
+                        <Route index element={<PatientProfile />} />
+                        <Route path="bookinghistory" element={<BookingHistory />} />
+                        <Route path="medicalresults" element={<MedicalResult />} />
+                    </Route>
+                </Route>
+
+                {/* Specialties Subpages (Keeping public for now) */}
                 <Route path="/specialties/emergency" element={<Emergency />} />
                 <Route path="/specialties/cardiology-center" element={<CardiologyCenter />} />
                 <Route path="/specialties/oncology-center" element={<OncologyCenter />} />
@@ -78,61 +90,53 @@ const AppRoutes = () => {
                 <Route path="/specialties/general-health" element={<GeneralHealth />} />
                 <Route path="/specialties/ophthalmology" element={<Ophthalmology />} />
 
-
-                {/* BF */}
-                <Route path="/booking" element={<Booking />} />
                 <Route path="/professionals" element={<Professionals />} />
                 <Route path="/professionals/:id" element={<ProfessionalsCard />} />
                 <Route path="*" element={<NotFound />} />
-
-                {/* Patient */}
-                <Route path="/myprofile" element={<PatientLayout />}>
-                    <Route index element={<PatientProfile />} />
-                    <Route path="bookinghistory" element={<BookingHistory />} />
-                    <Route path="medicalresults" element={<MedicalResult />} />
-                </Route>
-
             </Route>
 
             {/* ===== AUTH (không Navbar/Footer nếu muốn) ===== */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
 
-            {/* ===== ADMIN ===== */}
-            <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<Dashboard />} />
-                <Route path="users" element={<UserManagement />} />
-                <Route path="humanresources" element={<HumanResourceManagement />} />
-                <Route path="services" element={<Services />} />
+            {/* ===== PROTECTED ROUTES ===== */}
+            <Route element={<ProtectedRoute />}>
+                {/* ===== ADMIN ===== */}
+                <Route path="/admin" element={<AdminLayout />}>
+                    <Route index element={<Dashboard />} />
+                    <Route path="users" element={<UserManagement />} />
+                    <Route path="humanresources" element={<HumanResourceManagement />} />
+                    <Route path="services" element={<Services />} />
+                </Route>
+
+                {/* ===== DOCTOR ===== */}
+                <Route path="/doctor" element={<DoctorLayout />}>
+                    <Route index element={<DashboardDoctor />} />
+
+                    <Route path="patients" element={<Patients />} />
+                    <Route path="appointments" element={<AppointmentsDoctor />} />
+
+                    <Route path="patients/:patientId" element={<PatientDetail />} />
+                    <Route
+                        path="patients/:patientId/records"
+                        element={<MedicalRecords />}
+                    />
+                    <Route
+                        path="records/:recordId"
+                        element={<MedicalRecordDetail />}
+                    />
+                </Route>
+
+                {/* ===== STAFF ===== */}
+                <Route path="/staff" element={<StaffLayout />}>
+                    <Route index element={<DashboardStaff />} />
+
+                    <Route path="appointments" element={<AppoitmentsStaff />} />
+                    <Route path="check-in" element={<CheckIn />} />
+                    <Route path="invoices" element={<Invoices />} />
+                    <Route path="chat" element={<Chat />} />
+                </Route>
             </Route>
-
-            <Route path="/doctor" element={<DoctorLayout />}>
-                <Route index element={<DashboardDoctor />} />
-
-                <Route path="patients" element={<Patients />} />
-                <Route path="appointments" element={<AppointmentsDoctor />} />
-
-                <Route path="patients/:patientId" element={<PatientDetail />} />
-                <Route
-                    path="patients/:patientId/records"
-                    element={<MedicalRecords />}
-                />
-                <Route
-                    path="records/:recordId"
-                    element={<MedicalRecordDetail />}
-                />
-            </Route>
-
-            <Route path="/staff" element={<StaffLayout />}>
-                <Route index element={<DashboardStaff />} />
-
-                <Route path="appointments" element={<AppoitmentsStaff />} />
-                <Route path="check-in" element={<CheckIn />} />
-                <Route path="invoices" element={<Invoices />} />
-                <Route path="chat" element={<Chat />} />
-            </Route>
-
-
 
         </Routes>
     )
