@@ -854,6 +854,83 @@ export const mockUsers = [
   },
 ]
 
+export const bookingHistory = [
+  {
+    id: "BK001",
+    date: "20/01/2025",
+    time: "09:30",
+    doctor: "BS. Nguyễn Văn An",
+    specialty: "Tim mạch",
+    clinic: "Phòng khám HyCare",
+    status: "CONFIRMED",
+    price: 300000,
+  },
+  {
+    id: "BK002",
+    date: "10/12/2024",
+    time: "14:00",
+    doctor: "BS. Trần Thị Hoa",
+    specialty: "Da liễu",
+    clinic: "Phòng khám HyCare",
+    status: "COMPLETED",
+    price: 250000,
+  },
+  {
+    id: "BK003",
+    date: "05/12/2024",
+    time: "08:00",
+    doctor: "BS. Lê Văn Minh",
+    specialty: "Nội tổng quát",
+    clinic: "Phòng khám HyCare",
+    status: "CANCELLED",
+    price: 200000,
+  },
+];
+
+export const medicalResults = [
+  {
+    id: "MR001",
+    bookingId: "BK001",
+    year: 2025,
+    bookingInfo: {
+      date: "20/01/2025",
+      time: "09:30",
+      doctor: "BS. Nguyễn Văn An",
+      specialty: "Tim mạch",
+      clinic: "Phòng khám HyCare"
+    },
+    diagnosis: {
+      main: "Tăng huyết áp",
+      conclusion: "Theo dõi huyết áp, tái khám sau 1 tháng"
+    },
+    prescriptions: [
+      {
+        name: "Amlodipine",
+        dosage: "5mg",
+        usage: "1 viên/ngày",
+        duration: "30 ngày"
+      }
+    ]
+  },
+  {
+    id: "MR002",
+    bookingId: "BK002",
+    year: 2024,
+    bookingInfo: {
+      date: "12/12/2024",
+      time: "14:00",
+      doctor: "BS. Trần Thị Hoa",
+      specialty: "Da liễu",
+      clinic: "Phòng khám HyCare"
+    },
+    diagnosis: {
+      main: "Viêm da tiếp xúc",
+      conclusion: "Tránh dị ứng, dùng thuốc theo đơn"
+    },
+    prescriptions: []
+  }
+];
+
 
 
 

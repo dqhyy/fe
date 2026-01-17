@@ -52,6 +52,7 @@ import NotFound from '../pages/NotFound'
 import HumanResourceManagement from '../pages/admin/HumanResourceManagement'
 import AppointmentsDoctor from '../pages/doctor/AppointmentsDoctor'
 import ProtectedRoute from './ProtectedRoute'
+import MedicalResultDetail from '../pages/patient/MedicalResultDetail'
 
 const AppRoutes = () => {
     return (
@@ -71,6 +72,8 @@ const AppRoutes = () => {
                         <Route index element={<PatientProfile />} />
                         <Route path="bookinghistory" element={<BookingHistory />} />
                         <Route path="medicalresults" element={<MedicalResult />} />
+                        <Route path="medicalresults/:id" element={<MedicalResultDetail />} />
+
                     </Route>
                 </Route>
 
@@ -92,6 +95,7 @@ const AppRoutes = () => {
 
                 <Route path="/professionals" element={<Professionals />} />
                 <Route path="/professionals/:id" element={<ProfessionalsCard />} />
+
                 <Route path="*" element={<NotFound />} />
             </Route>
 

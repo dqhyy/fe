@@ -110,11 +110,25 @@ const Navbar = () => {
                                 <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md border border-gray-200 z-30">
                                     <div className="py-1">
                                         <Link
-                                            to="/profile"
+                                            to="/myprofile"
                                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                                             onClick={() => setProfileDropdownOpen(false)}
                                         >
                                             Hồ sơ
+                                        </Link>
+                                        <Link
+                                            to="/myprofile/bookinghistory"
+                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                                            onClick={() => setProfileDropdownOpen(false)}
+                                        >
+                                            Lịch sử đặt lịch
+                                        </Link>
+                                        <Link
+                                            to="/myprofile/medicalresults"
+                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                                            onClick={() => setProfileDropdownOpen(false)}
+                                        >
+                                            Kết quả khám bệnh
                                         </Link>
                                         <button
                                             onClick={handleLogout}
