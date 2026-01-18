@@ -32,12 +32,28 @@ const Login = () => {
 
       const data = await response.json();
 
-      if (data.token) {
-        localStorage.setItem("hycare_token", data.token);
-        const from = location.state?.from?.pathname || "/";
-        navigate(from, { replace: true });
+      const loginResult = data.result;
+
+      if (loginResult && loginResult.token) {
+        localStorage.setItem("hycare_token", loginResult.token);
+        localStorage.setItem("hycare_user_id", loginResult.id);
+        localStorage.setItem("hycare_user_name", loginResult.name);
+        if (loginResult.role) localStorage.setItem("hycare_user_role", loginResult.role);
+
+        window.dispatchEvent(new Event('authChange'));
+
+        if (loginResult.role === "ADMIN") {
+          navigate("/admin");
+        } else if (loginResult.role === "DOCTOR") {
+          navigate("/doctor");
+        } else if (loginResult.role === "STAFF") {
+          navigate("/staff");
+        } else {
+          const from = location.state?.from?.pathname || "/";
+          navigate(from, { replace: true });
+        }
       } else {
-        throw new Error("Không nhận được token từ máy chủ");
+        throw new Error(data.message || "Không nhận được token từ máy chủ");
       }
     } catch (err) {
       setError(err.message);

@@ -28,20 +28,14 @@ import Professionals from '../pages/Professionals'
 import About from '../pages/About'
 import ProfessionalsCard from '../pages/ProfessionalsCard'
 
-import Dashboard from '../pages/admin/Dashboard'
-import DashboardDoctor from '../pages/doctor/DashboardDoctor'
-
 import UserManagement from '../pages/admin/UserManagement'
 import Services from '../pages/admin/Services'
 import DoctorLayout from '../pages/doctor/layout/DoctorLayout'
 import Patients from '../pages/doctor/Patients'
-import PatientDetail from '../pages/doctor/PatientDetail'
+import PatientDetail from '../pages/doctor/DoctorProfile'
 import MedicalRecords from '../pages/doctor/MedicalRecords'
 import MedicalRecordDetail from '../pages/doctor/MedicalRecordDetail'
-import DashboardStaff from '../pages/staff/DashboardStaff'
 import StaffLayout from '../pages/staff/layout/StaffLayout'
-import CheckIn from '../pages/staff/CheckIn'
-import Invoices from '../pages/staff/Invoices'
 import Chat from '../pages/staff/Chat'
 import AppoitmentsStaff from '../pages/staff/AppoitmentsStaff'
 import PatientLayout from '../pages/patient/layout/PatientLayout'
@@ -53,6 +47,13 @@ import HumanResourceManagement from '../pages/admin/HumanResourceManagement'
 import AppointmentsDoctor from '../pages/doctor/AppointmentsDoctor'
 import ProtectedRoute from './ProtectedRoute'
 import MedicalResultDetail from '../pages/patient/MedicalResultDetail'
+import DoctorProfile from '../pages/doctor/DoctorProfile'
+import StaffProfile from '../pages/staff/StaffProfile'
+import StaffPatients from '../pages/staff/StaffPatients'
+import BillManagement from '../pages/staff/BillManagement'
+import PatientBills from '../pages/patient/PatientBills'
+import PaymentSuccess from '../pages/PaymentSuccess'
+import DashboardStaff from '../pages/staff/DashboardStaff'
 
 const AppRoutes = () => {
     return (
@@ -73,8 +74,9 @@ const AppRoutes = () => {
                         <Route path="bookinghistory" element={<BookingHistory />} />
                         <Route path="medicalresults" element={<MedicalResult />} />
                         <Route path="medicalresults/:id" element={<MedicalResultDetail />} />
-
+                        <Route path="bills" element={<PatientBills />} />
                     </Route>
+                    <Route path="/payment-success" element={<PaymentSuccess />} />
                 </Route>
 
                 {/* Specialties Subpages (Keeping public for now) */}
@@ -107,20 +109,19 @@ const AppRoutes = () => {
             <Route element={<ProtectedRoute />}>
                 {/* ===== ADMIN ===== */}
                 <Route path="/admin" element={<AdminLayout />}>
-                    <Route index element={<Dashboard />} />
-                    <Route path="users" element={<UserManagement />} />
+                    <Route index element={<UserManagement />} />
                     <Route path="humanresources" element={<HumanResourceManagement />} />
                     <Route path="services" element={<Services />} />
                 </Route>
 
                 {/* ===== DOCTOR ===== */}
                 <Route path="/doctor" element={<DoctorLayout />}>
-                    <Route index element={<DashboardDoctor />} />
+                    <Route index element={<DashboardStaff />} />
 
                     <Route path="patients" element={<Patients />} />
                     <Route path="appointments" element={<AppointmentsDoctor />} />
+                    <Route path="doctorprofile" element={<DoctorProfile />} />
 
-                    <Route path="patients/:patientId" element={<PatientDetail />} />
                     <Route
                         path="patients/:patientId/records"
                         element={<MedicalRecords />}
@@ -131,14 +132,24 @@ const AppRoutes = () => {
                     />
                 </Route>
 
+
                 {/* ===== STAFF ===== */}
                 <Route path="/staff" element={<StaffLayout />}>
-                    <Route index element={<DashboardStaff />} />
+                    <Route index element={<AppoitmentsStaff />} />
 
-                    <Route path="appointments" element={<AppoitmentsStaff />} />
-                    <Route path="check-in" element={<CheckIn />} />
-                    <Route path="invoices" element={<Invoices />} />
+                    <Route path="bills" element={<BillManagement />} />
+                    <Route path="patients" element={<StaffPatients />} />
                     <Route path="chat" element={<Chat />} />
+                    <Route path="profile" element={<StaffProfile />} />
+
+                    <Route
+                        path="patients/:patientId/records"
+                        element={<MedicalRecords />}
+                    />
+                    <Route
+                        path="records/:recordId"
+                        element={<MedicalRecordDetail />}
+                    />
                 </Route>
             </Route>
 

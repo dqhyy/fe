@@ -28,15 +28,12 @@ const GastroenterologyHepatology = () => {
 
         <div className='mx-20'>
 
-          {/* Title */}
           <h1 className="text-3xl font-bold text-center text-red-700">
             Tiêu hóa - Gan mật - Tiết niệu
           </h1>
 
-          {/* Divider */}
           <div className="w-24 h-1 bg-red-700 mx-auto mt-3 mb-10"></div>
 
-          {/* Tabs */}
           <div className="flex flex-wrap justify-center gap-3 mb-10 max-w mx-auto">
             {["overview", "services", "technology", "doctors"].map((item) => (
               <button
@@ -63,7 +60,6 @@ const GastroenterologyHepatology = () => {
             Là một trong các Trung tâm Tiêu hóa – gan mật – tiết niệu tốt tại Việt Nam, Trung tâm phát triển các phương pháp, kỹ thuật chẩn đoán điều trị hiện đại tiên tiến chuyên sâu, lấy các kỹ thuật ít xâm lấn làm mũi nhọn chuyên môn. Mục tiêu là đạt hiệu quả cao, ít đau, phục hồi sớm, thẩm mỹ, nâng cao chất lượng cuộc sống cho người bệnh.</p>
 
 
-          {/* Content */}
           <div className="px-10 bg-white text-gray-700 leading-7 text-lg">
 
             {tab === "overview" && (

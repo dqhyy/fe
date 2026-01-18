@@ -1,16 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { medicalResults } from "../../assets/data/data";
+import { getPatientMedicalRecords } from "../../services/patientService";
 
 const MedicalResult = () => {
   const [year, setYear] = useState("ALL");
+  const [medicalRecords, setMedicalRecords] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const years = ["ALL", ...new Set(medicalResults.map(i => i.year))];
+  useEffect(() => {
+    fetchMedicalRecords();
+  }, []);
+
+  const fetchMedicalRecords = async () => {
+    try {
+      const data = await getPatientMedicalRecords();
+      setMedicalRecords(data);
+    } catch (error) {
+      console.error("Failed to fetch medical records:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const years = ["ALL", ...new Set(medicalRecords.map(i => i.visitDate ? i.visitDate.substring(0, 4) : 'N/A'))];
 
   const filteredList =
     year === "ALL"
-      ? medicalResults
-      : medicalResults.filter(i => i.year === year);
+      ? medicalRecords
+      : medicalRecords.filter(i => (i.visitDate ? i.visitDate.substring(0, 4) : 'N/A') === year);
+
+  if (loading) return <div className="text-center py-10">Đang tải...</div>;
 
   return (
     <div className="container mx-auto py-10">
@@ -18,17 +37,16 @@ const MedicalResult = () => {
         Hồ sơ khám bệnh
       </h2>
 
-      {/* Filter giống Booking History */}
+      {/* Filter */}
       <div className="flex gap-3 mb-6">
         {years.map((y) => (
           <button
             key={y}
             onClick={() => setYear(y)}
             className={`px-4 py-2 rounded-md text-sm font-medium border
-              ${
-                year === y
-                  ? "bg-maincolor text-white border-maincolor"
-                  : "bg-white text-gray-600 hover:bg-gray-100"
+              ${year === y
+                ? "bg-maincolor text-white border-maincolor"
+                : "bg-white text-gray-600 hover:bg-gray-100"
               }
             `}
           >
@@ -47,13 +65,13 @@ const MedicalResult = () => {
             <div className="flex justify-between items-start">
               <div>
                 <h3 className="font-semibold text-lg">
-                  {item.bookingInfo.doctor} – {item.bookingInfo.specialty}
+                  {item.doctorName} – {item.specialty}
                 </h3>
                 <p className="text-gray-500 text-sm mt-1">
-                  {item.bookingInfo.date} • {item.bookingInfo.clinic}
+                  {item.visitDate} • {item.clinicName}
                 </p>
                 <p className="text-gray-700 mt-2">
-                  <strong>Chẩn đoán:</strong> {item.diagnosis.main}
+                  <strong>Chẩn đoán:</strong> {item.diagnosis}
                 </p>
               </div>
 

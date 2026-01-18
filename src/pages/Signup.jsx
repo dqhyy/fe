@@ -4,8 +4,13 @@ import { TextField, Button, MenuItem, Alert, CircularProgress } from "@mui/mater
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+    const [fullName, setFullName] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [gender, setGender] = useState("");
+    const [dateOfBirth, setDateOfBirth] = useState("");
+    const [citizenIdentificationCard, setCitizenIdentificationCard] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
@@ -16,7 +21,7 @@ const Signup = () => {
         e.preventDefault();
         setError("");
 
-        if (!username || !email || !password || !confirmPassword) {
+        if (!fullName || !username || !email || !password || !confirmPassword || !phoneNumber || !gender || !dateOfBirth || !citizenIdentificationCard) {
             setError("Vui lòng điền đầy đủ thông tin");
             return;
         }
@@ -40,28 +45,33 @@ const Signup = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
+                    fullName,
                     username,
-                    password,
                     email,
+                    phoneNumber,
+                    gender,
+                    dateOfBirth,
+                    citizenIdentificationCard,
+                    password,
                 }),
             });
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
                 throw new Error(
-                    errorData.message || 
-                    errorData.error || 
+                    errorData.message ||
+                    errorData.error ||
                     "Đăng ký thất bại. Vui lòng thử lại."
                 );
             }
 
             const data = await response.json();
-            
+
             if (data.result || data.status === "success") {
-                navigate("/login", { 
-                    state: { 
-                        message: "Đăng ký thành công! Vui lòng đăng nhập." 
-                    } 
+                navigate("/login", {
+                    state: {
+                        message: "Đăng ký thành công! Vui lòng đăng nhập."
+                    }
                 });
             } else {
                 throw new Error("Đăng ký thất bại. Vui lòng thử lại.");
@@ -97,67 +107,81 @@ const Signup = () => {
 
             {/* Form */}
             <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-                <TextField 
-                    label="Tên đăng nhập" 
-                    fullWidth 
+                <TextField
+                    label="Họ và tên"
+                    fullWidth
+                    variant="outlined"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    required
+                />
+                <TextField
+                    label="Tên đăng nhập"
+                    fullWidth
                     variant="outlined"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
                 />
-                <TextField 
-                    label="Email" 
-                    type="email" 
-                    fullWidth 
+                <TextField
+                    label="Email"
+                    type="email"
+                    fullWidth
                     variant="outlined"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                 />
-                <TextField 
-                    label="Số điện thoại" 
-                    type="tel" 
-                    fullWidth 
-                    variant="outlined" 
+                <TextField
+                    label="Số điện thoại"
+                    type="tel"
+                    fullWidth
+                    variant="outlined"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    required
+                />
+                <TextField
+                    label="CCCD/CMND"
+                    fullWidth
+                    variant="outlined"
+                    value={citizenIdentificationCard}
+                    onChange={(e) => setCitizenIdentificationCard(e.target.value)}
+                    required
                 />
 
-                {/* Tuổi + Giới tính */}
+                {/* Giới tính + Ngày sinh */}
                 <div className="flex gap-3">
-                    {/* Tuổi */}
-                    <TextField
-                        label="Tuổi"
-                        type="number"
-                        variant="outlined"
-                        className="w-1/6"
-                        InputProps={{ inputProps: { min: 0, max: 120 } }}
-                    />
-
-                    {/* Giới tính */}
                     <TextField
                         select
                         label="Giới tính"
                         variant="outlined"
                         className="w-1/3"
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
+                        required
                     >
-                        <MenuItem value="male">Nam</MenuItem>
-                        <MenuItem value="female">Nữ</MenuItem>
-                        <MenuItem value="other">Khác</MenuItem>
+                        <MenuItem value="MALE">Nam</MenuItem>
+                        <MenuItem value="FEMALE">Nữ</MenuItem>
+                        <MenuItem value="OTHER">Khác</MenuItem>
                     </TextField>
 
-                    {/* Ngày sinh */}
                     <TextField
                         label="Ngày sinh"
                         type="date"
                         variant="outlined"
                         InputLabelProps={{ shrink: true }}
                         className="flex-1"
+                        value={dateOfBirth}
+                        onChange={(e) => setDateOfBirth(e.target.value)}
+                        required
                     />
                 </div>
 
-                <TextField 
-                    label="Mật khẩu" 
-                    type="password" 
-                    fullWidth 
+                <TextField
+                    label="Mật khẩu"
+                    type="password"
+                    fullWidth
                     variant="outlined"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}

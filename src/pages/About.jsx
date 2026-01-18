@@ -8,7 +8,6 @@ const About = () => {
             <CoverSection title="GIỚI THIỆU" />
 
             <div className="container mx-auto mt-10 px-4">
-                {/* Breadcrumb */}
                 <div className="flex items-center mb-8 text-sm">
                     <Link to="/" className="text-maincolor font-semibold">
                         Trang chủ
@@ -17,7 +16,6 @@ const About = () => {
                     <span className="text-gray-600">Giới thiệu</span>
                 </div>
 
-                {/* Vision & Mission */}
                 <section className="grid md:grid-cols-2 gap-8 items-center mt-8 mb-16">
                     <div className="rounded-lg overflow-hidden shadow-lg">
                         <img
@@ -54,7 +52,6 @@ const About = () => {
                     </div>
                 </section>
 
-                {/* Core Values */}
                 <section className="bg-white rounded-xl shadow-lg p-8 mb-12">
                     <h2 className="text-3xl font-bold text-center mb-8">
                         Giá trị cốt lõi – <span className="text-maincolor">C.A.R.E</span>

@@ -1,17 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getPatientProfile } from "../../services/patientService";
 
 const PatientProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   const [profile, setProfile] = useState({
-    fullName: "Nguyễn Văn A",
-    gender: "Nam",
-    email: "patient@gmail.com",
-    dob: "1998-06-20",
-    phone: "0123456789",
-    job: "Nhân viên văn phòng",
-    address: "Hà Nội",
-    avatar: "https://i.pravatar.cc/150"
+    fullName: "",
+    gender: "",
+    email: "",
+    dob: "",
+    phone: "",
+    job: "",
+    address: "",
+    avatar: "https://ui-avatars.com/api/?name=User&background=random"
   });
 
   const handleChange = (e) => {
@@ -21,11 +22,53 @@ const PatientProfile = () => {
     });
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     setIsEditing(false);
+
+    // Upload avatar if changed
+    if (profile.avatarFile) {
+      const formData = new FormData();
+      formData.append("file", profile.avatarFile);
+
+      try {
+        const token = localStorage.getItem("hycare_token");
+        await fetch("http://localhost:8080/api/auth/avatar", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`
+          },
+          body: formData
+        });
+      } catch (error) {
+        console.error("Failed to upload avatar", error);
+      }
+    }
+
     console.log("Updated profile:", profile);
     // TODO: call API PUT /patients/profile
   };
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const data = await getPatientProfile();
+      if (data) {
+        setProfile((prev) => ({
+          ...prev,
+          fullName: data.fullName || "",
+          gender: data.gender === "MALE" ? "Nam" : data.gender === "FEMALE" ? "Nữ" : "",
+          email: data.email || "",
+          dob: data.dateOfBirth || "",
+          phone: data.phoneNumber || "",
+          job: "", // Backend doesn't have job field yet
+          address: data.address || "",
+          avatar: data.image ? `data:image/jpeg;base64,${data.image}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(data.fullName || "User")}&background=random`,
+          identityNumber: data.identityNumber || "",
+          insuranceNumber: data.insuranceNumber || ""
+        }));
+      }
+    };
+    fetchProfile();
+  }, []);
 
   return (
     <div className="mx-10">
@@ -96,6 +139,7 @@ const PatientProfile = () => {
                   : "bg-white appearance-auto pr-8"
                 }`}
             >
+              <option value="">Chọn giới tính</option>
               <option value="Nam">Nam</option>
               <option value="Nữ">Nữ</option>
               <option value="Khác">Khác</option>

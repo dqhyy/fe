@@ -1,28 +1,44 @@
 import React, { useState, useMemo, useEffect } from "react"
 import { Link } from "react-router-dom"
 import CoverSection from "../components/CoverSection"
-import { specialties, doctors } from "../assets/data/data"
+import { specialties } from "../assets/data/data"
+import { getAllDoctors } from "../services/doctorService"
 
 const degreeOptions = ["BS", "ThS", "PGS.TS", "BSCKII", "BSCKI"]
 const ITEMS_PER_PAGE = 10
 
 
 const Professionals = () => {
+    const [doctors, setDoctors] = useState([])
+    const [loading, setLoading] = useState(true)
+
     const [search, setSearch] = useState("")
     const [selectedSpecialties, setSelectedSpecialties] = useState([])
     const [selectedDegrees, setSelectedDegrees] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
 
+    useEffect(() => {
+        const fetchDoctors = async () => {
+            try {
+                const data = await getAllDoctors()
+                setDoctors(data)
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchDoctors()
+    }, [])
 
-    /* ===== BUILD SPECIALTY OPTIONS (KEY + LABEL) ===== */
+
     const specialtyOptions = useMemo(() => {
         return specialties.flat().map(item => ({
             label: item.label,
-            key: item.link.split("/").pop(), // ex: cardiology-center
+            key: item.link.split("/").pop(),
         }))
     }, [])
 
-    /* ===== TOGGLE CHECKBOX ===== */
     const toggleItem = (item, list, setList) => {
         setList(
             list.includes(item)
@@ -31,29 +47,27 @@ const Professionals = () => {
         )
     }
 
-    /* ===== FILTER LOGIC ===== */
     const filteredDoctors = useMemo(() => {
         return doctors.filter(d => {
             const matchName =
-                d.name.toLowerCase().includes(search.toLowerCase())
+                !search || (d.name && d.name.toLowerCase().includes(search.toLowerCase()))
 
             const matchSpecialty =
                 selectedSpecialties.length === 0 ||
-                selectedSpecialties.includes(d.specialty.key)
+                (d.specialty && d.specialty.key && selectedSpecialties.includes(d.specialty.key))
 
             const matchDegree =
                 selectedDegrees.length === 0 ||
-                selectedDegrees.some(deg => d.degree.includes(deg))
+                (d.degree && selectedDegrees.some(deg => d.degree.includes(deg)))
 
             return matchName && matchSpecialty && matchDegree
         })
-    }, [search, selectedSpecialties, selectedDegrees])
+    }, [doctors, search, selectedSpecialties, selectedDegrees])
 
     useEffect(() => {
         setCurrentPage(1)
     }, [search, selectedSpecialties, selectedDegrees])
 
-    /* ===== PAGINATION LOGIC ===== */
     const totalPages = Math.ceil(filteredDoctors.length / ITEMS_PER_PAGE)
 
     const paginatedDoctors = useMemo(() => {
@@ -63,11 +77,11 @@ const Professionals = () => {
 
     return (
         <div className="bg-bgcolor pb-20">
+            {loading && <div className="text-center py-10">Đang tải dữ liệu...</div>}
             <CoverSection title="CHUYÊN GIA Y TẾ" />
 
             <div className="container mx-auto mt-10 px-4">
 
-                {/* ===== BREADCRUMB ===== */}
                 <div className="flex items-center mb-8 text-sm">
                     <Link to="/" className="text-maincolor font-semibold">
                         Trang chủ
@@ -78,7 +92,6 @@ const Professionals = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
 
-                    {/* ===== FILTER ===== */}
                     <aside className="bg-white rounded-2xl shadow-md p-6 h-fit">
 
                         <div className="flex items-center justify-between mb-4">
@@ -95,7 +108,6 @@ const Professionals = () => {
                             </button>
                         </div>
 
-                        {/* SEARCH */}
                         <div className="mb-5">
                             <input
                                 type="text"
@@ -106,7 +118,6 @@ const Professionals = () => {
                             />
                         </div>
 
-                        {/* SPECIALTIES */}
                         <div className="mb-6">
                             <h4 className="font-medium mb-2">Chuyên khoa</h4>
                             <div className="space-y-2 max-h-52 overflow-auto pr-1">
@@ -135,7 +146,6 @@ const Professionals = () => {
                             </div>
                         </div>
 
-                        {/* DEGREES */}
                         <div>
                             <h4 className="font-medium mb-2">Học vị</h4>
                             <div className="space-y-2">
@@ -165,10 +175,8 @@ const Professionals = () => {
                         </div>
                     </aside>
 
-                    {/* ===== DOCTOR LIST ===== */}
                     <section className="lg:col-span-3">
 
-                        {/* SELECTED TAGS */}
                         {(selectedSpecialties.length > 0 ||
                             selectedDegrees.length > 0) && (
                                 <div className="flex flex-wrap gap-2 mb-6">
@@ -195,7 +203,6 @@ const Professionals = () => {
                                 </div>
                             )}
 
-                        {/* LIST */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
                             {paginatedDoctors.map(doctor => (
                                 <div
@@ -245,8 +252,8 @@ const Professionals = () => {
                                         key={i}
                                         onClick={() => setCurrentPage(i + 1)}
                                         className={`px-3 py-1 rounded border ${currentPage === i + 1
-                                                ? "bg-maincolor text-white"
-                                                : ""
+                                            ? "bg-maincolor text-white"
+                                            : ""
                                             }`}
                                     >
                                         {i + 1}

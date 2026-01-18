@@ -7,11 +7,50 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { specialties } from '../assets/data/data.js';
 
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+
+import { getMyInfo } from '../services/authService';
+
 const Navbar = () => {
     const [activeMenu, setActiveMenu] = useState(null);
     const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
     const profileDropdownRef = useRef(null);
     const navigate = useNavigate();
+
+    const [userRole, setUserRole] = useState(localStorage.getItem('hycare_user_role'));
+    const [avatarUrl, setAvatarUrl] = useState(null);
+
+    const fetchUserInfo = async () => {
+        const userInfo = await getMyInfo();
+        if (userInfo) {
+            if (userInfo.image) {
+                setAvatarUrl(`data:image/jpeg;base64,${userInfo.image}`);
+            } else {
+                setAvatarUrl(`https://ui-avatars.com/api/?name=${encodeURIComponent(userInfo.fullName || userInfo.username || "User")}&background=random`);
+            }
+        } else {
+            setAvatarUrl(null);
+        }
+    };
+
+    useEffect(() => {
+        const handleStorageChange = () => {
+            setUserRole(localStorage.getItem('hycare_user_role'));
+            fetchUserInfo();
+        };
+
+        if (localStorage.getItem('hycare_token')) {
+            fetchUserInfo();
+        }
+
+        window.addEventListener('authChange', handleStorageChange);
+        window.addEventListener('storage', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('authChange', handleStorageChange);
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, []);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -28,22 +67,26 @@ const Navbar = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('hycare_token');
+        localStorage.removeItem('hycare_user_id');
+        localStorage.removeItem('hycare_user_name');
+        localStorage.removeItem('hycare_user_role');
+        setAvatarUrl(null);
+
+        window.dispatchEvent(new Event('authChange'));
+
         navigate('/login');
     };
 
     return (
         <nav className="fixed top-0 left-0 w-full z-20 bg-white">
-            {/* Top bar */}
             <div className="shadow-md">
                 <div className="container mx-auto h-16 flex items-center justify-between ">
-                    {/* Logo */}
                     <Link to="/" className="flex items-center font-montserrat">
                         <img src="/logo.png" alt="HyCare Logo" className="w-10 h-auto mr-2" />
                         <span className="font-semibold text-2xl text-maincolor">Hy</span>
                         <span className="font-semibold text-2xl text-gray-700">Care</span>
                     </Link>
 
-                    {/* Search */}
                     <div className="flex-1 mx-4 flex">
                         <div className="container mx-auto flex justify-center gap-20 text-gray-700 h-12 items-center">
                             <Link to="/" className="hover:text-maincolor transition-colors">Trang chủ</Link>
@@ -91,18 +134,37 @@ const Navbar = () => {
                         </div>
                     </div>
 
-                    {/* Icons */}
                     <div className="flex items-center gap-3">
+                        {userRole === 'ADMIN' && (
+                            <Link to="/admin" className="text-maincolor hover:text-gray-700 transition-colors" title="Quản trị hệ thống">
+                                <AdminPanelSettingsIcon fontSize="medium" />
+                            </Link>
+                        )}
+
+                        {userRole === 'DOCTOR' && (
+                            <Link to="/doctor" className="text-maincolor hover:text-gray-700 transition-colors" title="Trang bác sĩ">
+                                <AdminPanelSettingsIcon fontSize="medium" />
+                            </Link>
+                        )}
+
                         <button className="text-maincolor hover:text-gray-700 transition-colors">
                             <NotificationsIcon fontSize="medium" />
                         </button>
 
                         <div className="relative" ref={profileDropdownRef}>
-                            <button 
+                            <button
                                 className="flex items-center text-maincolor hover:text-gray-700 transition-colors"
                                 onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                             >
-                                <AccountCircleIcon fontSize="medium" />
+                                {avatarUrl ? (
+                                    <img
+                                        src={avatarUrl}
+                                        alt="Avatar"
+                                        className="w-8 h-8 rounded-full object-cover border border-gray-200"
+                                    />
+                                ) : (
+                                    <AccountCircleIcon fontSize="medium" />
+                                )}
                                 <ArrowDropDownIcon fontSize="medium" />
                             </button>
 
@@ -130,9 +192,30 @@ const Navbar = () => {
                                         >
                                             Kết quả khám bệnh
                                         </Link>
+
+                                        {userRole === 'ADMIN' && (
+                                            <Link
+                                                to="/admin"
+                                                className="block px-4 py-2 text-sm text-maincolor font-medium hover:bg-gray-100 transition-colors border-t border-gray-100"
+                                                onClick={() => setProfileDropdownOpen(false)}
+                                            >
+                                                Quản trị hệ thống
+                                            </Link>
+                                        )}
+
+                                        {userRole === 'DOCTOR' && (
+                                            <Link
+                                                to="/doctor"
+                                                className="block px-4 py-2 text-sm text-maincolor font-medium hover:bg-gray-100 transition-colors border-t border-gray-100"
+                                                onClick={() => setProfileDropdownOpen(false)}
+                                            >
+                                                Trang bác sĩ
+                                            </Link>
+                                        )}
+
                                         <button
                                             onClick={handleLogout}
-                                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center gap-2"
+                                            className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors flex items-center gap-2 border-t border-gray-100"
                                         >
                                             <LogoutIcon fontSize="small" />
                                             Đăng xuất

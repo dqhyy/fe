@@ -19,7 +19,6 @@ const BF = () => {
         <>
             <div className="max-w-4xl w-full h-20 mx-auto grid grid-cols-3 shadow-lg rounded-t-lg overflow-hidden">
 
-                {/* Liên hệ */}
                 <button
                     onClick={() => setOpenContact(true)}
                     className="flex items-center justify-center gap-2 bg-contactcolor text-white text-lg"
@@ -28,7 +27,6 @@ const BF = () => {
                     Liên hệ
                 </button>
 
-                {/* Đặt lịch */}
                 <Link
                     to="/booking"
                     className="flex items-center justify-center gap-2 bg-bookingcolor text-white text-lg"
@@ -37,7 +35,6 @@ const BF = () => {
                     Đặt lịch
                 </Link>
 
-                {/* Tìm bác sĩ */}
                 <Link
                     to="/professionals"
                     className="flex items-center justify-center gap-2 bg-doctorcolor text-white text-lg"

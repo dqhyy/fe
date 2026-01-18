@@ -1,51 +1,77 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { bookingHistory } from "../../assets/data/data";
+import { getPatientAppointments } from "../../services/patientService";
 
 const statusMap = {
+  PENDING: {
+    label: "Chờ xác nhận",
+    color: "text-amber-600 bg-amber-50",
+  },
   CONFIRMED: {
     label: "Đã xác nhận",
     color: "text-blue-600 bg-blue-50",
   },
-  COMPLETED: {
+  FINISHED: {
     label: "Đã khám",
     color: "text-green-600 bg-green-50",
+  },
+  REJECTED: {
+    label: "Đã từ chối",
+    color: "text-red-600 bg-red-50",
   },
   CANCELLED: {
     label: "Đã hủy",
     color: "text-red-600 bg-red-50",
-  },
+  }
 };
 
 const BookingHistory = () => {
   const [filter, setFilter] = useState("ALL");
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchAppointments();
+  }, []);
+
+  const fetchAppointments = async () => {
+    try {
+      const data = await getPatientAppointments();
+      setAppointments(data);
+    } catch (error) {
+      console.error("Failed to fetch appointments:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredBookings =
     filter === "ALL"
-      ? bookingHistory
-      : bookingHistory.filter((b) => b.status === filter);
+      ? appointments
+      : appointments.filter((b) => b.status === filter);
+
+  if (loading) return <div className="text-center py-10">Đang tải...</div>;
 
   return (
     <div className="container mx-auto py-10">
       <h2 className="text-2xl font-semibold mb-6">Lịch sử đặt lịch</h2>
 
       {/* Filter */}
-      <div className="flex gap-3 mb-6">
-        {["ALL", "CONFIRMED", "COMPLETED", "CANCELLED"].map((item) => (
+      <div className="flex gap-3 mb-6 overflow-x-auto pb-2">
+        {["ALL", "PENDING", "CONFIRMED", "FINISHED", "REJECTED"].map((item) => (
           <button
             key={item}
             onClick={() => setFilter(item)}
-            className={`px-4 py-2 rounded-md text-sm font-medium border
-              ${
-                filter === item
-                  ? "bg-maincolor text-white border-maincolor"
-                  : "bg-white text-gray-600 hover:bg-gray-100"
+            className={`px-4 py-2 rounded-md text-sm font-medium border whitespace-nowrap
+              ${filter === item
+                ? "bg-maincolor text-white border-maincolor"
+                : "bg-white text-gray-600 hover:bg-gray-100"
               }
             `}
           >
             {item === "ALL"
               ? "Tất cả"
-              : statusMap[item].label}
+              : statusMap[item]?.label || item}
           </button>
         ))}
       </div>
@@ -60,41 +86,43 @@ const BookingHistory = () => {
             <div className="flex justify-between items-start">
               <div>
                 <h3 className="font-semibold text-lg">
-                  {booking.doctor} – {booking.specialty}
+                  {booking.doctorName || "Bác sĩ"} – {booking.specialty}
                 </h3>
                 <p className="text-gray-500 text-sm mt-1">
-                  {booking.date} • {booking.time}
+                  {booking.appointmentDate || "N/A"}
                 </p>
-                <p className="text-gray-500 text-sm">
-                  {booking.clinic}
+                <p className="text-gray-500 text-sm mt-1">
+                  Lý do: {booking.reasonForVisit}
                 </p>
               </div>
 
               <span
-                className={`px-3 py-1 rounded-full text-sm font-medium ${statusMap[booking.status].color}`}
+                className={`px-3 py-1 rounded-full text-sm font-medium ${statusMap[booking.status]?.color || 'bg-gray-100'}`}
               >
-                {statusMap[booking.status].label}
+                {statusMap[booking.status]?.label || booking.status}
               </span>
             </div>
 
             <div className="flex justify-between items-center mt-4">
               <p className="text-gray-700 font-medium">
-                Phí khám:{" "}
-                <span className="text-maincolor">
-                  {booking.price.toLocaleString()}đ
-                </span>
+                {/* Price is not in API yet, hiding or showing placeholder */}
               </p>
 
               <div className="flex gap-3">
+                {/* Link to detail if available */}
+                {/* 
                 <Link
                   to={`/booking/${booking.id}`}
                   className="px-4 py-2 text-sm rounded-md border border-maincolor text-maincolor hover:bg-maincolor hover:text-white transition"
                 >
                   Xem chi tiết
                 </Link>
+                */}
 
-                {booking.status === "CONFIRMED" && (
-                  <button className="px-4 py-2 text-sm rounded-md border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition">
+                {booking.status === "PENDING" && (
+                  <button className="px-4 py-2 text-sm rounded-md border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition"
+                    onClick={() => alert("Tính năng hủy chưa được cập nhật")}
+                  >
                     Hủy lịch
                   </button>
                 )}

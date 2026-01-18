@@ -1,10 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { doctors } from '../assets/data/data';
+import { getAllDoctors } from '../services/doctorService';
+import { CircularProgress } from '@mui/material';
 
 const ProfessionalsCard = () => {
   const { id } = useParams();
-  const doctor = doctors.find(d => d.id.toString() === id);
+  const [doctor, setDoctor] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDoctor = async () => {
+      try {
+        const doctors = await getAllDoctors();
+        const found = doctors.find(d => d.id.toString() === id);
+        setDoctor(found);
+      } catch (error) {
+        console.error("Failed to fetch doctor details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDoctor();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="bg-bgcolor pb-20 flex justify-center pt-10">
+        <CircularProgress />
+      </div>
+    );
+  }
 
   if (!doctor) {
     return (
@@ -20,7 +45,6 @@ const ProfessionalsCard = () => {
     <div className="bg-bgcolor pb-20">
       <div className="container mx-auto px-4">
 
-        {/* Breadcrumb */}
         <div className="flex items-center pt-5 mb-8 text-sm">
           <Link to="/" className="text-maincolor font-semibold">
             Trang chủ
@@ -33,11 +57,9 @@ const ProfessionalsCard = () => {
           <span className="text-gray-600">{doctor.name}</span>
         </div>
 
-        {/* Doctor Card */}
         <div className="bg-white rounded-2xl shadow-md p-8">
           <div className="flex flex-col md:flex-row gap-8">
 
-            {/* Avatar */}
             <img
               src={doctor.image}
               alt={doctor.name}
@@ -58,7 +80,7 @@ const ProfessionalsCard = () => {
               </div>
 
               <span className="inline-block mt-3 mb-4 py-1 text-sx">
-                 {doctor.specialty.name}
+                {doctor.specialty.name}
               </span>
 
               <p className="text-gray-600 mb-2">{doctor.degree}</p>

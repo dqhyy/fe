@@ -26,15 +26,12 @@ const CardiologyCenter = () => {
 
         <div className='mx-20'>
 
-          {/* Title */}
           <h1 className="text-3xl font-bold text-center text-red-700">
             Khám và điều trị theo tiêu chuẩn Mỹ
           </h1>
 
-          {/* Divider */}
           <div className="w-24 h-1 bg-red-700 mx-auto mt-3 mb-10"></div>
 
-          {/* Tabs */}
           <div className="flex flex-wrap justify-center gap-3 mb-10 max-w mx-auto">
             {["overview", "services", "technology", "doctors"].map((item) => (
               <button
@@ -62,7 +59,6 @@ const CardiologyCenter = () => {
           </p>
 
 
-          {/* Content */}
           <div className="px-10 bg-white text-gray-700 leading-7 text-lg">
 
             {tab === "overview" && (

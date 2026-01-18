@@ -26,6 +26,11 @@ const Sidebar = () => {
       icon: <Users size={18} />,
       path: "/myprofile/medicalresults",
     },
+    {
+      label: "Hóa đơn & Thanh toán",
+      icon: <Users size={18} />,
+      path: "/myprofile/bills",
+    },
   ];
 
   return (
@@ -42,10 +47,9 @@ const Sidebar = () => {
             end={item.end}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2 rounded-lg font-medium transition
-              ${
-                isActive
-                  ? "bg-maincolor text-white"
-                  : "text-gray-700 hover:bg-gray-100"
+              ${isActive
+                ? "bg-maincolor text-white"
+                : "text-gray-700 hover:bg-gray-100"
               }`
             }
           >

@@ -1,18 +1,32 @@
 import { useMemo, useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import { doctors } from "../assets/data/data"
+import { getAllDoctors } from "../services/doctorService"
 
 const PAGE_SIZE = 10
 
 const DoctorList = ({ specialtyKey }) => {
+    const [doctors, setDoctors] = useState([])
+    const [loading, setLoading] = useState(true)
     const [page, setPage] = useState(1)
 
-    // reset page khi đổi chuyên khoa
+    useEffect(() => {
+        const fetchDoctors = async () => {
+            try {
+                const data = await getAllDoctors()
+                setDoctors(data)
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchDoctors()
+    }, [])
+
     useEffect(() => {
         setPage(1)
     }, [specialtyKey])
 
-    // lọc bác sĩ theo chuyên khoa + đang hoạt động
     const filteredDoctors = useMemo(() => {
         return doctors.filter(
             d =>
@@ -28,6 +42,8 @@ const DoctorList = ({ specialtyKey }) => {
         return filteredDoctors.slice(start, start + PAGE_SIZE)
     }, [filteredDoctors, page])
 
+    if (loading) return <p className="text-gray-500">Đang tải danh sách bác sĩ...</p>
+
     if (filteredDoctors.length === 0) {
         return (
             <p className="text-gray-500">
@@ -38,7 +54,6 @@ const DoctorList = ({ specialtyKey }) => {
 
     return (
         <div className="space-y-6">
-            {/* Danh sách bác sĩ */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {pagedDoctors.map(doctor => (
                     <div
@@ -79,7 +94,6 @@ const DoctorList = ({ specialtyKey }) => {
                                 )}
                             </div>
 
-                            {/* Button đăng ký khám */}
                             <Link
                                 to={`/booking?doctorId=${doctor.id}`}
                                 className="mt-3 inline-block text-center
@@ -94,7 +108,6 @@ const DoctorList = ({ specialtyKey }) => {
                 ))}
             </div>
 
-            {/* Pagination */}
             {totalPages > 1 && (
                 <div className="flex justify-center gap-2">
                     {Array.from({ length: totalPages }).map((_, index) => (

@@ -6,7 +6,6 @@ const WhyUs = () => {
         <div className="py-14">
             <div className="container mx-auto px-6">
 
-                {/* Title */}
                 <h1 className="font-bold text-3xl text-gray-800">
                     Tại sao nên chọn HyCare?
                 </h1>
@@ -14,7 +13,6 @@ const WhyUs = () => {
 
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
 
-                    {/* Image */}
                     <div className="flex justify-center">
                         <img
                             src="/whyus.png"
@@ -23,7 +21,6 @@ const WhyUs = () => {
                         />
                     </div>
 
-                    {/* Content */}
                     <div className="grid sm:grid-cols-2 gap-6">
                         {whyus.map((item) => (
                             <div key={item.id}>

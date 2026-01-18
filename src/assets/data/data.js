@@ -36,6 +36,7 @@ import partner4 from "/partner_4.webp";
 
 
 
+
 export const specialties = [
   [
     {
@@ -135,6 +136,156 @@ export const whyus = [
 
 export const certifies = [certifi1, certifi2, certifi3, certifi4, certifi5];
 export const partners = [partner1, partner2, partner3, partner4];
+
+
+
+
+
+export const services = [
+  {
+    code: "PHYSIO_SESS",
+    name: "Buổi vật lý trị liệu",
+    price: 200000,
+
+    category: "Điều trị",
+    specialty: "Phục hồi chức năng",
+    status: "ACTIVE",
+    requireDoctor: false,
+  },
+
+  {
+    code: "RADIATION_SESS",
+    name: "Buổi xạ trị",
+    price: 1500000,
+
+    category: "Điều trị",
+    specialty: "Trung tâm ung bướu",
+    status: "ACTIVE",
+    requireDoctor: true,
+  },
+
+  {
+    code: "CT_CHEST",
+    name: "Chụp CT ngực",
+    price: 700000,
+
+    category: "Chẩn đoán",
+    specialty: "Chẩn đoán hình ảnh",
+    status: "ACTIVE",
+    requireDoctor: true,
+  },
+];
+
+export const mockUsers = [
+  {
+    id: '8045042',
+    name: 'Nguyen Van A',
+    email: 'a@gmail.com',
+    createdAt: 'Jul 25, 2023 09:33',
+    status: 'Active',
+  },
+  {
+    id: '8023157',
+    name: 'Tran Thi B',
+    email: 'b@yahoo.com',
+    createdAt: 'Jul 19, 2023 09:24',
+    status: 'Active',
+  },
+  {
+    id: '7439147',
+    name: 'Le Van C',
+    email: 'c@gmail.ru',
+    createdAt: 'Apr 20, 2023 13:40',
+    status: 'Deactivated',
+  },
+  {
+    id: '7344752',
+    name: 'Pham Van D',
+    email: 'd@company.com-DELETED',
+    createdAt: 'Mar 29, 2023 05:06',
+    status: 'Deleted',
+  },
+]
+
+export const bookingHistory = [
+  {
+    id: "BK001",
+    date: "20/01/2025",
+    time: "09:30",
+    doctor: "BS. Nguyễn Văn An",
+    specialty: "Tim mạch",
+    clinic: "Phòng khám HyCare",
+    status: "CONFIRMED",
+    price: 300000,
+  },
+  {
+    id: "BK002",
+    date: "10/12/2024",
+    time: "14:00",
+    doctor: "BS. Trần Thị Hoa",
+    specialty: "Da liễu",
+    clinic: "Phòng khám HyCare",
+    status: "COMPLETED",
+    price: 250000,
+  },
+  {
+    id: "BK003",
+    date: "05/12/2024",
+    time: "08:00",
+    doctor: "BS. Lê Văn Minh",
+    specialty: "Nội tổng quát",
+    clinic: "Phòng khám HyCare",
+    status: "CANCELLED",
+    price: 200000,
+  },
+];
+
+export const medicalResults = [
+  {
+    id: "MR001",
+    bookingId: "BK001",
+    year: 2025,
+    bookingInfo: {
+      date: "20/01/2025",
+      time: "09:30",
+      doctor: "BS. Nguyễn Văn An",
+      specialty: "Tim mạch",
+      clinic: "Phòng khám HyCare"
+    },
+    diagnosis: {
+      main: "Tăng huyết áp",
+      conclusion: "Theo dõi huyết áp, tái khám sau 1 tháng"
+    },
+    prescriptions: [
+      {
+        name: "Amlodipine",
+        dosage: "5mg",
+        usage: "1 viên/ngày",
+        duration: "30 ngày"
+      }
+    ]
+  },
+  {
+    id: "MR002",
+    bookingId: "BK002",
+    year: 2024,
+    bookingInfo: {
+      date: "12/12/2024",
+      time: "14:00",
+      doctor: "BS. Trần Thị Hoa",
+      specialty: "Da liễu",
+      clinic: "Phòng khám HyCare"
+    },
+    diagnosis: {
+      main: "Viêm da tiếp xúc",
+      conclusion: "Tránh dị ứng, dùng thuốc theo đơn"
+    },
+    prescriptions: []
+  }
+];
+
+
+
 
 export const doctors = [
   // Cấp cứu
@@ -788,150 +939,158 @@ export const doctors = [
 ];
 
 
-export const services = [
+export const chatList = [
   {
-    code: "PHYSIO_SESS",
-    name: "Buổi vật lý trị liệu",
-    price: 200000,
-
-    category: "Điều trị",
-    specialty: "Phục hồi chức năng",
-    status: "ACTIVE",
-    requireDoctor: false,
+    id: 1,
+    name: "Nguyễn Hoàng Long",
+    role: "Bệnh nhân",
+    lastMessage: "Bác sĩ cho em hỏi kết quả khám?",
+    messages: [
+      { from: "patient", text: "Chào bác sĩ ạ" },
+      { from: "doctor", text: "Chào bạn, tôi có thể giúp gì?" },
+      { from: "patient", text: "Bác sĩ cho em hỏi kết quả khám?" },
+    ],
   },
-
   {
-    code: "RADIATION_SESS",
-    name: "Buổi xạ trị",
-    price: 1500000,
-
-    category: "Điều trị",
-    specialty: "Trung tâm ung bướu",
-    status: "ACTIVE",
-    requireDoctor: true,
+    id: 2,
+    name: "Trần Thị Mai",
+    role: "Bệnh nhân",
+    lastMessage: "Em cảm ơn bác sĩ nhiều",
+    messages: [
+      { from: "patient", text: "Em đã uống thuốc theo toa" },
+      { from: "doctor", text: "Tốt lắm, theo dõi thêm nhé" },
+      { from: "patient", text: "Em cảm ơn bác sĩ nhiều" },
+    ],
   },
-
   {
-    code: "CT_CHEST",
-    name: "Chụp CT ngực",
-    price: 700000,
-
-    category: "Chẩn đoán",
-    specialty: "Chẩn đoán hình ảnh",
-    status: "ACTIVE",
-    requireDoctor: true,
+    id: 3,
+    name: "Trần Thị Mai",
+    role: "Bệnh nhân",
+    lastMessage: "Em cảm ơn bác sĩ nhiều",
+    messages: [
+      { from: "patient", text: "Em đã uống thuốc theo toa" },
+      { from: "doctor", text: "Tốt lắm, theo dõi thêm nhé" },
+      { from: "patient", text: "Em cảm ơn bác sĩ nhiều" },
+    ],
+  },{
+    id: 4,
+    name: "Trần Thị Mai",
+    role: "Bệnh nhân",
+    lastMessage: "Em cảm ơn bác sĩ nhiều",
+    messages: [
+      { from: "patient", text: "Em đã uống thuốc theo toa" },
+      { from: "doctor", text: "Tốt lắm, theo dõi thêm nhé" },
+      { from: "patient", text: "Em cảm ơn bác sĩ nhiều" },
+    ],
+  },{
+    id: 5,
+    name: "Trần Thị Mai",
+    role: "Bệnh nhân",
+    lastMessage: "Em cảm ơn bác sĩ nhiều",
+    messages: [
+      { from: "patient", text: "Em đã uống thuốc theo toa" },
+      { from: "doctor", text: "Tốt lắm, theo dõi thêm nhé" },
+      { from: "patient", text: "Em cảm ơn bác sĩ nhiều" },
+    ],
+  },{
+    id: 6,
+    name: "Trần Thị Mai",
+    role: "Bệnh nhân",
+    lastMessage: "Em cảm ơn bác sĩ nhiều",
+    messages: [
+      { from: "patient", text: "Em đã uống thuốc theo toa" },
+      { from: "doctor", text: "Tốt lắm, theo dõi thêm nhé" },
+      { from: "patient", text: "Em cảm ơn bác sĩ nhiều" },
+    ],
+  },{
+    id: 7,
+    name: "Trần Thị Mai",
+    role: "Bệnh nhân",
+    lastMessage: "Em cảm ơn bác sĩ nhiều",
+    messages: [
+      { from: "patient", text: "Em đã uống thuốc theo toa" },
+      { from: "doctor", text: "Tốt lắm, theo dõi thêm nhé" },
+      { from: "patient", text: "Em cảm ơn bác sĩ nhiều" },
+    ],
+  },{
+    id: 8,
+    name: "Trần Thị Mai",
+    role: "Bệnh nhân",
+    lastMessage: "Em cảm ơn bác sĩ nhiều",
+    messages: [
+      { from: "patient", text: "Em đã uống thuốc theo toa" },
+      { from: "doctor", text: "Tốt lắm, theo dõi thêm nhé" },
+      { from: "patient", text: "Em cảm ơn bác sĩ nhiều" },
+    ],
+  },{
+    id: 9,
+    name: "Trần Thị Mai",
+    role: "Bệnh nhân",
+    lastMessage: "Em cảm ơn bác sĩ nhiều",
+    messages: [
+      { from: "patient", text: "Em đã uống thuốc theo toa" },
+      { from: "doctor", text: "Tốt lắm, theo dõi thêm nhé" },
+      { from: "patient", text: "Em cảm ơn bác sĩ nhiều" },
+    ],
+  },{
+    id: 10,
+    name: "Trần Thị Mai",
+    role: "Bệnh nhân",
+    lastMessage: "Em cảm ơn bác sĩ nhiều",
+    messages: [
+      { from: "patient", text: "Em đã uống thuốc theo toa" },
+      { from: "doctor", text: "Tốt lắm, theo dõi thêm nhé" },
+      { from: "patient", text: "Em cảm ơn bác sĩ nhiều" },
+    ],
+  },{
+    id: 11,
+    name: "Trần Thị Mai",
+    role: "Bệnh nhân",
+    lastMessage: "Em cảm ơn bác sĩ nhiều",
+    messages: [
+      { from: "patient", text: "Em đã uống thuốc theo toa" },
+      { from: "doctor", text: "Tốt lắm, theo dõi thêm nhé" },
+      { from: "patient", text: "Em cảm ơn bác sĩ nhiều" },
+    ],
+  },{
+    id: 12,
+    name: "Trần Thị Mai",
+    role: "Bệnh nhân",
+    lastMessage: "Em cảm ơn bác sĩ nhiều",
+    messages: [
+      { from: "patient", text: "Em đã uống thuốc theo toa" },
+      { from: "doctor", text: "Tốt lắm, theo dõi thêm nhé" },
+      { from: "patient", text: "Em cảm ơn bác sĩ nhiều" },
+    ],
+  },{
+    id: 13,
+    name: "Trần Thị Mai",
+    role: "Bệnh nhân",
+    lastMessage: "Em cảm ơn bác sĩ nhiều",
+    messages: [
+      { from: "patient", text: "Em đã uống thuốc theo toa" },
+      { from: "doctor", text: "Tốt lắm, theo dõi thêm nhé" },
+      { from: "patient", text: "Em cảm ơn bác sĩ nhiều" },
+    ],
+  },{
+    id: 14,
+    name: "Trần Thị Mai",
+    role: "Bệnh nhân",
+    lastMessage: "Em cảm ơn bác sĩ nhiều",
+    messages: [
+      { from: "patient", text: "Em đã uống thuốc theo toa" },
+      { from: "doctor", text: "Tốt lắm, theo dõi thêm nhé" },
+      { from: "patient", text: "Em cảm ơn bác sĩ nhiều" },
+    ],
+  },{
+    id: 15,
+    name: "Trần Thị Mai",
+    role: "Bệnh nhân",
+    lastMessage: "Em cảm ơn bác sĩ nhiều",
+    messages: [
+      { from: "patient", text: "Em đã uống thuốc theo toa" },
+      { from: "doctor", text: "Tốt lắm, theo dõi thêm nhé" },
+      { from: "patient", text: "Em cảm ơn bác sĩ nhiều" },
+    ],
   },
 ];
-
-export const mockUsers = [
-  {
-    id: '8045042',
-    name: 'Nguyen Van A',
-    email: 'a@gmail.com',
-    createdAt: 'Jul 25, 2023 09:33',
-    status: 'Active',
-  },
-  {
-    id: '8023157',
-    name: 'Tran Thi B',
-    email: 'b@yahoo.com',
-    createdAt: 'Jul 19, 2023 09:24',
-    status: 'Active',
-  },
-  {
-    id: '7439147',
-    name: 'Le Van C',
-    email: 'c@gmail.ru',
-    createdAt: 'Apr 20, 2023 13:40',
-    status: 'Deactivated',
-  },
-  {
-    id: '7344752',
-    name: 'Pham Van D',
-    email: 'd@company.com-DELETED',
-    createdAt: 'Mar 29, 2023 05:06',
-    status: 'Deleted',
-  },
-]
-
-export const bookingHistory = [
-  {
-    id: "BK001",
-    date: "20/01/2025",
-    time: "09:30",
-    doctor: "BS. Nguyễn Văn An",
-    specialty: "Tim mạch",
-    clinic: "Phòng khám HyCare",
-    status: "CONFIRMED",
-    price: 300000,
-  },
-  {
-    id: "BK002",
-    date: "10/12/2024",
-    time: "14:00",
-    doctor: "BS. Trần Thị Hoa",
-    specialty: "Da liễu",
-    clinic: "Phòng khám HyCare",
-    status: "COMPLETED",
-    price: 250000,
-  },
-  {
-    id: "BK003",
-    date: "05/12/2024",
-    time: "08:00",
-    doctor: "BS. Lê Văn Minh",
-    specialty: "Nội tổng quát",
-    clinic: "Phòng khám HyCare",
-    status: "CANCELLED",
-    price: 200000,
-  },
-];
-
-export const medicalResults = [
-  {
-    id: "MR001",
-    bookingId: "BK001",
-    year: 2025,
-    bookingInfo: {
-      date: "20/01/2025",
-      time: "09:30",
-      doctor: "BS. Nguyễn Văn An",
-      specialty: "Tim mạch",
-      clinic: "Phòng khám HyCare"
-    },
-    diagnosis: {
-      main: "Tăng huyết áp",
-      conclusion: "Theo dõi huyết áp, tái khám sau 1 tháng"
-    },
-    prescriptions: [
-      {
-        name: "Amlodipine",
-        dosage: "5mg",
-        usage: "1 viên/ngày",
-        duration: "30 ngày"
-      }
-    ]
-  },
-  {
-    id: "MR002",
-    bookingId: "BK002",
-    year: 2024,
-    bookingInfo: {
-      date: "12/12/2024",
-      time: "14:00",
-      doctor: "BS. Trần Thị Hoa",
-      specialty: "Da liễu",
-      clinic: "Phòng khám HyCare"
-    },
-    diagnosis: {
-      main: "Viêm da tiếp xúc",
-      conclusion: "Tránh dị ứng, dùng thuốc theo đơn"
-    },
-    prescriptions: []
-  }
-];
-
-
-
-
-

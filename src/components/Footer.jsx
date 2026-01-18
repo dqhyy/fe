@@ -16,7 +16,6 @@ const Footer = () => {
                         Hy<span className="text-gray-700">Care</span>
                     </h1>
                 </div>
-                {/* Hệ thống HyCare */}
                 <div className="space-y-2">
                     <h2 className="font-semibold text-lg">Hệ thống HyCare</h2>
                     <ul className="space-y-1 text-sm">
@@ -32,7 +31,6 @@ const Footer = () => {
                     </ul>
                 </div>
 
-                {/* Dịch vụ */}
                 <div className="space-y-2">
                     <p className="font-semibold text-lg">Dịch vụ</p>
                     <ul className="space-y-1 text-sm">
@@ -45,7 +43,6 @@ const Footer = () => {
                     </ul>
                 </div>
 
-                {/* Theo dõi chúng tôi */}
                 <div className="space-y-2">
                     <p className="font-semibold text-lg">Theo dõi chúng tôi</p>
                     <div className="flex items-center space-x-4 mt-2">
@@ -64,7 +61,6 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* Chứng nhận & Bảo vệ */}
                 <div className="space-y-2">
                     <h2 className="text-lg font-semibold mb-2">Chứng nhận & Bảo vệ</h2>
                     <div className="flex flex-col space-y-4">
@@ -78,7 +74,6 @@ const Footer = () => {
                 </div>
             </div>
 
-            {/* Bottom bar */}
             <div className=" py-4 border-t border-gray-200">
                 <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
                     <p className="text-center md:text-left mb-3 md:mb-0">

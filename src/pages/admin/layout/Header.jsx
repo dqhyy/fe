@@ -1,8 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Bell } from "lucide-react";
 import { Link } from 'react-router-dom';
+import { getMyInfo } from '../../../services/authService';
 
 const Header = () => {
+    const [userInfo, setUserInfo] = useState({
+        name: 'Admin',
+        role: 'Quản trị viên',
+        avatar: "https://ui-avatars.com/api/?name=Admin&background=random"
+    });
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const data = await getMyInfo();
+                if (data) {
+                    setUserInfo({
+                        name: data.fullName || data.username,
+                        role: 'Quản trị viên',
+                        avatar: data.image ? `data:image/jpeg;base64,${data.image}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(data.fullName || data.username || "Admin")}&background=random`
+                    });
+                }
+            } catch (error) {
+                console.error("Failed to fetch admin info", error);
+            }
+        };
+        fetchUser();
+    }, []);
+
     return (
         <header className="h-16 bg-white border-b flex items-center justify-between px-6 gap-4">
             <div>
@@ -17,13 +42,13 @@ const Header = () => {
             <div className="flex items-center gap-3">
                 <Bell className="text-gray-600" />
                 <img
-                    src="https://i.pravatar.cc/40"
+                    src={userInfo.avatar}
                     alt="avatar"
-                    className="w-9 h-9 rounded-full"
+                    className="w-9 h-9 rounded-full object-cover"
                 />
                 <div>
-                    <div className="text-sm font-semibold">Huy Đỗ</div>
-                    <div className="text-xs text-gray-500">Quản trị viên</div>
+                    <div className="text-sm font-semibold">{userInfo.name}</div>
+                    <div className="text-xs text-gray-500">{userInfo.role}</div>
                 </div>
             </div>
         </header>

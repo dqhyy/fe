@@ -27,15 +27,12 @@ const PediatricsCenter = () => {
 
         <div className='mx-20'>
 
-          {/* Title */}
           <h1 className="text-3xl font-bold text-center text-red-700">
             Đồng hành cùng ba mẹ chăm sóc và nâng niu những mầm xanh!
           </h1>
 
-          {/* Divider */}
           <div className="w-24 h-1 bg-red-700 mx-auto mt-3 mb-10"></div>
 
-          {/* Tabs */}
           <div className="flex flex-wrap justify-center gap-3 mb-10 max-w mx-auto">
             {["overview", "services", "technology", "doctors"].map((item) => (
               <button
@@ -59,7 +56,6 @@ const PediatricsCenter = () => {
           </div>
 
 
-          {/* Content */}
           <div className="px-10 bg-white text-gray-700 leading-7 text-lg">
 
             {tab === "overview" && (

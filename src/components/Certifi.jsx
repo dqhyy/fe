@@ -8,7 +8,6 @@ const Certifi = () => {
     <div className="bg-maincolor py-14">
       <div className="container mx-auto px-6 text-white">
 
-        {/* Title */}
         <h1 className="font-bold text-3xl">
           Chứng nhận và giải thưởng
         </h1>
@@ -16,7 +15,6 @@ const Certifi = () => {
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
 
-          {/* Left content */}
           <div>
             <p className="text-white/90 leading-relaxed mb-6">
               HyCare tự hào được các tổ chức y tế uy tín trong và ngoài nước
